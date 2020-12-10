@@ -1,0 +1,16 @@
+﻿
+<form method="post" asp-controller="account" asp-action="Delete">
+    <input type="hidden" name="email" value=@User.Claims.ToList()[0].Value />
+    <button type="submit" style="width:auto"
+            class="nav-link btn btn-link py-0">
+        Delete Me
+    </button>
+</form>
+
+<form method="get" asp-controller="account" asp-action="edit">
+    <input type="hidden" name="email" value=@User.Claims.ToList()[0].Value />
+    <button type="submit" style="width:auto"
+            class="nav-link btn btn-link py-0">
+        Edit
+    </button>
+</form>
