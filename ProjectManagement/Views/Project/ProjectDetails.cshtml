@@ -1,0 +1,83 @@
+﻿@model ProjectDetails
+@{
+    var claims = User.Claims.ToList();
+    string USEREMAIL = claims?.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Email))?.Value;
+    int USERID = -1; // no id in database start with negative number
+    int.TryParse(claims?.FirstOrDefault(c => c.Type.Equals("UserId"))?.Value, out USERID);
+}
+@{
+    ViewBag.Title = "Project Details";
+}
+
+<h4>@Model.Project.Name</h4>
+
+
+
+<p>@Model.Project.Description</p>
+
+<form method="get" asp-controller="Ticket" asp-action="AddTicket">
+    <input type="hidden" name="projectId" value=@Model.Project.Id>
+    <input type="hidden" name="userId" value=@USERID>
+    <a class="btn btn-primary" onclick="this.parentNode.submit();">Add Ticket</a>
+</form>
+
+@if (Model.Tickets.Count != 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Ticket</th>
+                <th scope="col">User</th>
+                <th scope="col">Status</th>
+                <th scope="col">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int number = 1;
+                foreach (var ticket in Model.Tickets)
+                {
+                    <tr>
+                        <th scope="row">@number</th>
+                        <td>
+                            @*<form method="post" asp-controller="Project" asp-action="UpdateTicket">
+                                <input type="hidden" name="userId" value=@ticket.Id>
+                                <input type="hidden" name="ticketId" value=@ticket.UserId>
+                                <a onclick="this.parentNode.submit();">@ticket.Name</a>
+                            </form>*@
+                            @ticket.Name
+                        </td>
+                        @if (@ticket.User.Id == USERID)
+                        {
+                            <td class="highlightRow">
+                                @ticket.User.Name
+                            </td>
+                        }
+                        else
+                        {
+                            <td>@ticket.User.Name</td>
+                        }
+
+                        @if (ticket.Status == false)
+                        {
+                            <td>In Progress</td>
+                        }
+                        else
+                        {
+                            <td>Finished</td>
+                        }
+
+                        <td>@ticket.Description</td>
+
+                        @{
+                            number++;
+                        }
+
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+

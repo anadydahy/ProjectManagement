@@ -1,0 +1,10 @@
+﻿.link {
+    color: blue;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.highlightRow {
+    font-weight: bold;
+    font-style:italic;
+}

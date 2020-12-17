@@ -1,0 +1,74 @@
+﻿@model IndexViewModel
+@{
+    var claims = User.Claims.ToList();
+    string USEREMAIL = claims?.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Email))?.Value;
+    int USERID = -1; // no id in database start with negative number
+    int.TryParse(claims?.FirstOrDefault(c => c.Type.Equals("UserId"))?.Value, out USERID);
+}
+@{
+    ViewBag.Title = "Home Page";
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Project</th>
+            <th scope="col">Description</th>
+            <th scope="col">Status</th>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <th scope="col">Enrolled?</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int number = 1;
+            foreach (var project in Model.Projects)
+            {
+                <tr>
+                    <th scope="row">@number</th>
+                    <td>
+                        <form method="get" asp-controller="Project" asp-action="ProjectDetails">
+                            <input type="hidden" name="projectId" value=@project.Id>
+                            <a class="link" onclick="this.parentNode.submit();">@project.Name</a>
+                        </form>
+                    </td>
+                    <td>@project.Description</td>
+                    @if (project.Status == false)
+                    {
+                        <td>In Progress</td>
+                    }
+                    else
+                    {
+                        <td>Finished</td>
+                    }
+                    @if (User.Identity.IsAuthenticated && Model.UserProjects != null)
+                    {
+                        var isFound = Model.UserProjects.FirstOrDefault(userProject => userProject.ProjectId == project.Id);
+
+                        if (isFound != null)
+                        {
+                            <td>Enrolled</td>
+                        }
+                        else
+                        {
+                            <td>
+                                <form method="post" asp-controller="Home" asp-action="UserEnrollProject">
+                                    <input type="hidden" name="userId" value=@USERID>
+                                    <input type="hidden" name="projectId" value=@project.Id>
+                                    <a class="btn btn-primary" onclick="this.parentNode.submit();">Enroll</a>
+                                </form>
+                            </td>
+                        }
+                    }
+
+                    @{
+                        number++;
+                    }
+
+                </tr>
+            }
+        }
+    </tbody>
+</table>
