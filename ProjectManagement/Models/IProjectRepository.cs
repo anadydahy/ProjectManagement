@@ -16,13 +16,8 @@ namespace ProjectManagement.Models
 
         Task<Project> UserAddProject(int userId, Project project);
 
-        Task UserEnrollInExistProject(int userId, int projectId);
+        Task<UserProject> UserEnrollInExistProject(int userId, int projectId);
 
-        // only Creator of project "the first user who add a project" can Update it will add role in phase 3
-        //Task UpdateProject(Project projectChanges);
-
-        // only Creator of project "the first user who add a project" can delete it will add role in phase 3
-        //Task DeleteProjectWithRelatedTickets(int projectId);
 
     }
 }

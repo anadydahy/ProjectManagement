@@ -7,7 +7,6 @@
 
 <form asp-action="AddTicket" asp-controller="ticket" method="post">
 
-    <input type="hidden" asp-for="UserId" value=@Model.UserId />
     <input type="hidden" asp-for="ProjectId" value=@Model.ProjectId />
 
     <div asp-validation-summary="All" class="text-danger"></div>

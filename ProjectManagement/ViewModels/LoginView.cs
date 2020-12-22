@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.ViewModels
 {
-    public class LoginViewModel
+    public class LoginView
     {
         [Required]
         [EmailAddress]

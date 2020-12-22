@@ -3,11 +3,10 @@
 @{
     ViewBag.Title = "Add Project";
 }
+
 <h1>Add Project</h1>
 
 <form asp-action="AddProject" asp-controller="Project" method="post">
-
-    <input type="hidden" asp-for="UserId" value=@Model.UserId />
 
     <div asp-validation-summary="All" class="text-danger"></div>
 
@@ -20,6 +19,7 @@
     <div class="form-group">
         <label asp-for="Description"></label>
         <textarea class="form-control" asp-for="Description"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
     <label><input type="radio" asp-for="Status" value="false">In Progress</label>

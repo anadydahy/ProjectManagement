@@ -2,7 +2,7 @@
 
 namespace ProjectManagement.ViewModels
 {
-    public class RegisterViewModel
+    public class RegisterInput
     {
         [Required]
         [MaxLength(50, ErrorMessage = "Name can't exceed 50 characters")]

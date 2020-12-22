@@ -27,19 +27,7 @@ namespace ProjectManagement.Models
             return result ?? null;
         }
 
-        //CAUTION : here deleting user with out related Tickets(tasks) better to user DeleteMeAndMyWork()
-        public async Task<User> Delete(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
-            }
-            return user;
-        }
-
-        public async Task<User> DeleteMeAndMyWork(string email)
+        public async Task<User> Delete(string email)
         {
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
 

@@ -1,10 +1,5 @@
-﻿@model IndexViewModel
-@{
-    var claims = User.Claims.ToList();
-    string USEREMAIL = claims?.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Email))?.Value;
-    int USERID = -1; // no id in database start with negative number
-    int.TryParse(claims?.FirstOrDefault(c => c.Type.Equals("UserId"))?.Value, out USERID);
-}
+﻿@model IndexView
+
 @{
     ViewBag.Title = "Home Page";
 }
@@ -55,10 +50,11 @@
                         {
                             <td>
                                 <form method="post" asp-controller="Home" asp-action="UserEnrollProject">
-                                    <input type="hidden" name="userId" value=@USERID>
                                     <input type="hidden" name="projectId" value=@project.Id>
                                     <a class="btn btn-primary" onclick="this.parentNode.submit();">Enroll</a>
                                 </form>
+
+
                             </td>
                         }
                     }

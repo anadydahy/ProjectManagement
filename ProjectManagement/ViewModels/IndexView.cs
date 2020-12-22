@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.ViewModels
 {
-    public class IndexViewModel
+    public class IndexView
     {
         public List<Project> Projects { get; set; }
 

@@ -26,7 +26,7 @@ namespace ProjectManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginView model)
         {
             // to know if user authentiatied
             bool isAuthenticated = User.Identity.IsAuthenticated;
@@ -79,7 +79,7 @@ namespace ProjectManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterInput model)
         {
             if (!ModelState.IsValid)
             {
@@ -113,7 +113,7 @@ namespace ProjectManagement.Controllers
         {
             var user = await _userRepository.GetUser(email);
 
-            var model = new RegisterViewModel()
+            var model = new RegisterInput()
             {
                 Name = user.Name,
                 Email = user.Email
@@ -123,7 +123,7 @@ namespace ProjectManagement.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Edit(RegisterViewModel model)
+        public async Task<IActionResult> Edit(RegisterInput model)
         {
             if (ModelState.IsValid)
             {
@@ -146,7 +146,7 @@ namespace ProjectManagement.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(string email)
         {
-            await _userRepository.DeleteMeAndMyWork(email);
+            await _userRepository.Delete(email);
 
             await LogOut();
 
@@ -157,8 +157,8 @@ namespace ProjectManagement.Controllers
         {
             var userClaims = new List<Claim>()
             {
-                new Claim("UserId", userId.ToString()),
-                new Claim(ClaimTypes.Email, email),
+                new Claim(ClaimTypes.NameIdentifier ,userId.ToString()),
+                new Claim(ClaimTypes.Email, email)
             };
 
             var userIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);

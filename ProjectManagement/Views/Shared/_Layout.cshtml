@@ -1,8 +1,6 @@
 ﻿@{
     var claims = User.Claims.ToList();
     string USEREMAIL = claims?.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Email))?.Value;
-    int USERID = -1; // no id in database start with negative number
-    int.TryParse(claims?.FirstOrDefault(c => c.Type.Equals("UserId"))?.Value, out USERID);
 }
 <!DOCTYPE html>
 <html>
@@ -28,10 +26,7 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                 <li class="nav-item">
-                    <form method="get" asp-controller="Project" asp-action="AddProject">
-                        <input type="hidden" name="userId" value=@USERID>
-                        <a class="nav-link btn" onclick="this.parentNode.submit();">Add Project</a>
-                    </form>
+                        <a class="nav-link btn" asp-controller="Project" asp-action="AddProject">Add Project</a>
                 </li>
                     }
                 </ul>

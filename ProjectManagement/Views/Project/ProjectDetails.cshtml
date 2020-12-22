@@ -1,10 +1,5 @@
 ﻿@model ProjectDetails
-@{
-    var claims = User.Claims.ToList();
-    string USEREMAIL = claims?.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Email))?.Value;
-    int USERID = -1; // no id in database start with negative number
-    int.TryParse(claims?.FirstOrDefault(c => c.Type.Equals("UserId"))?.Value, out USERID);
-}
+
 @{
     ViewBag.Title = "Project Details";
 }
@@ -17,7 +12,6 @@
 
 <form method="get" asp-controller="Ticket" asp-action="AddTicket">
     <input type="hidden" name="projectId" value=@Model.Project.Id>
-    <input type="hidden" name="userId" value=@USERID>
     <a class="btn btn-primary" onclick="this.parentNode.submit();">Add Ticket</a>
 </form>
 
@@ -41,14 +35,9 @@
                     <tr>
                         <th scope="row">@number</th>
                         <td>
-                            @*<form method="post" asp-controller="Project" asp-action="UpdateTicket">
-                                <input type="hidden" name="userId" value=@ticket.Id>
-                                <input type="hidden" name="ticketId" value=@ticket.UserId>
-                                <a onclick="this.parentNode.submit();">@ticket.Name</a>
-                            </form>*@
                             @ticket.Name
                         </td>
-                        @if (@ticket.User.Id == USERID)
+                        @if (@ticket.User.Id == Model.UserId)
                         {
                             <td class="highlightRow">
                                 @ticket.User.Name

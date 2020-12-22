@@ -62,6 +62,12 @@ namespace ProjectManagement.Models
         public async Task<Project> UserAddProject(int userId, Project project)
         {
             var user = await _context.Users.FindAsync(userId);
+
+            if(user == null)
+            {
+                return null;
+            }
+
             var userProject = new UserProject() { UserId = user.Id, User = user, ProjectId = project.Id, Project = project };
 
             await _context.UserProjects.AddAsync(userProject);
@@ -71,48 +77,29 @@ namespace ProjectManagement.Models
             return project;
         }
 
-        public async Task UserEnrollInExistProject(int userId, int projectId)
+        public async Task<UserProject> UserEnrollInExistProject(int userId, int projectId)
         {
             var user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                return null;
+            }
+
             var project = await _context.Projects.FindAsync(projectId);
+
+            if (project == null)
+            {
+                return null;
+            }
+
             var userProject = new UserProject() { UserId = user.Id, User = user, ProjectId = project.Id, Project = project };
 
             await _context.UserProjects.AddAsync(userProject);
             await _context.SaveChangesAsync();
+
+            return userProject;
         }
-
-        // only Creator of project "the first user who add a project" can Update it will add role in phase 3
-
-        //public async Task UpdateProject(Project projectChanges)
-        //{
-        //    var project = _context.Projects.Attach(projectChanges);
-        //    project.State = EntityState.Modified;
-        //    await _context.SaveChangesAsync();
-        //}
-
-        // only Creator of project "the first user who add a project" can delete it will add role in phase 3
-
-        //public async Task DeleteProjectWithRelatedTickets(int projectId)
-        //{
-        //    var projectExist = _context.Project.Find(projectId);
-
-        //    var projectTickets = await (from p in _context.Project
-        //                                join tp in _context.TicketProject
-        //                                on p.Id equals tp.ProjectId
-        //                                where p.Id == projectId
-        //                                select new TicketProject
-        //                                {
-        //                                    TicketId = tp.TicketId,
-        //                                    Ticket = tp.Ticket,
-        //                                    ProjectId = tp.ProjectId,
-        //                                    Project = tp.Project
-        //                                }).ToListAsync();
-
-        //    _context.Project.Remove(projectExist);
-        //    _context.TicketProject.RemoveRange(projectTickets);
-
-        //    await _context.SaveChangesAsync();
-        //}
 
     }
 }
