@@ -28,12 +28,18 @@ namespace ProjectManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginView model)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             // to know if user authentiatied
             bool isAuthenticated = User.Identity.IsAuthenticated;
 
             if (isAuthenticated)
             {
-                return RedirectToAction("Home/Index");
+                return RedirectToAction("Index","Home");
             }
 
             var user = await _userRepository.GetUser(model.Email);
@@ -41,7 +47,7 @@ namespace ProjectManagement.Controllers
             if (user == null)
             {
                 // user not found but not revealing this info to client security reasons
-                ModelState.AddModelError("", "Invailed User Name or Password"); // 
+                ModelState.AddModelError("InvalidLoginAttempt", "Invailed User Name or Password"); // 
                 return View();
             }
 
@@ -50,7 +56,7 @@ namespace ProjectManagement.Controllers
             if (!verified)
             {
                 // user found but type wrong password
-                ModelState.AddModelError("", "Invailed User Name or Password"); // 
+                ModelState.AddModelError("InvalidLoginAttempt", "Invailed User Name or Password"); // 
                 return View();
             }
 
@@ -92,7 +98,7 @@ namespace ProjectManagement.Controllers
             if (isUserExist != null)
             {
                 // user name (Email) must be unique
-                ModelState.AddModelError("", "User is already exists"); // 
+                ModelState.AddModelError("UserExist", "User is already exists"); // 
                 return View();
             }
 

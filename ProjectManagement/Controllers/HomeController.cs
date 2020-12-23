@@ -17,6 +17,11 @@ namespace ProjectManagement.Controllers
             _projectRepository = projectRepository;
         }
 
+        public IActionResult nady()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> Index()
         {
             var indexView = new IndexView();
@@ -50,14 +55,17 @@ namespace ProjectManagement.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> UserEnrollProject(int userId, int projectId)
+        public async Task<IActionResult> UserEnrollProject(int projectId)
         {
+            int userId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
             var result = await _projectRepository.UserEnrollInExistProject(userId, projectId);
+
             if(result == null)
             {
                 // here something wrong with database as userId is getteing from claims and project id comes from method action in button
                 return View("~/Views/shared/Error.cshtml");
             }
+
             return RedirectToAction("Index");
         }
 
